@@ -4,3 +4,5 @@ venv
 application/client_secret.json
 .DS_Store
 .idea
+.cache-mrjie123
+__pycache__/
