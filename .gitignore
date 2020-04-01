@@ -1,0 +1,6 @@
+#Credential information
+application/private_info.py
+venv
+application/client_secret.json
+.DS_Store
+.idea
