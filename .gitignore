@@ -1,8 +1,9 @@
 #Credential information
-application/private_info.py
+application/resources/private_info.py
 venv
-application/client_secret.json
+application/resources/client_secret.json
 .DS_Store
 .idea
 .cache-mrjie123
 __pycache__/
+application/resources/google_credentials.json
