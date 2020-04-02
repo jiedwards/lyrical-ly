@@ -63,6 +63,7 @@ class GenerateSpotifyPlaylist:
         youtube_playlist_desciption = "A compilation of every video liked by me on youtube."
         all_user_playlists = spotifyObject.current_user_playlists(50)
 
+        # To check whether a playlist already exists, before creating an entirely new one.
         for playlist in all_user_playlists["items"]:
             if playlist["name"] == youtube_playlist_name:
                 return playlist["id"]
@@ -71,8 +72,35 @@ class GenerateSpotifyPlaylist:
                                                       youtube_playlist_desciption)
         return new_playlist["id"]
 
+    def get_liked_yt_videos(self):
+        request = self.youtube_client.videos().list(
+            part="snippet,contentDetails,statistics",
+            myRating="like"
+        )
+        response = request.execute()
+
+        for video in response["items"]:
+            video_title = video["snippet"]["title"]
+            youtube_url = "https://www.youtube.com/watch?v={}".format(video["id"])
+
+            video = youtube_dl.YoutubeDL({}).extract_info(youtube_url, download=False)
+            song_name = video["track"]
+            artist = video["artist"]
+
+            if song_name is not None and artist is not None:
+                # save all important info and skip any missing song and artist
+                self.all_song_info[video_title] = {
+                    "youtube_url": youtube_url,
+                    "song_name": song_name,
+                    "artist": artist,
+
+                    # add the uri, easy to get song to put into playlist
+                    "spotify_uri": self.get_spotify_uri(song_name, artist)
+
+                }
+
 
 if __name__ == '__main__':
     generatePlaylist = GenerateSpotifyPlaylist()
-    generatePlaylist.generate_playlist()
-
+    generatePlaylist.add_song_to_playlist()
+    generatePlaylist.start_playback()
