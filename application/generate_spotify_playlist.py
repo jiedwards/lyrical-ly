@@ -94,6 +94,24 @@ class GenerateSpotifyPlaylist:
 
                 }
 
+    def get_spotify_uri(self, song_name, artist):
+        # Functionality to search for song
+        query = "https://api.spotify.com/v1/search?query=track%3A{}+artist%3A{}&type=track&offset=0&limit=20".format(
+            song_name,
+            artist
+        )
+        response = requests.get(
+            query,
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": "Bearer {}".format(self.auth)
+            }
+        )
+        response_json = response.json()
+        print("response {}, response json {}".format(response, response_json))
+        songs = response_json["tracks"]["items"]
+        uri = songs[0]["uri"]
+        return uri
 
 if __name__ == '__main__':
     generatePlaylist = GenerateSpotifyPlaylist()
