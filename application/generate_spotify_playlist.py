@@ -2,7 +2,6 @@ import os
 
 import googleapiclient.discovery
 import googleapiclient.errors
-import requests
 import spotipy
 import spotipy.util as util
 import youtube_dl
@@ -43,8 +42,8 @@ def get_spotify_token():
     return token
 
 
-spotify_token = get_spotify_token()
-spotifyObject = spotipy.Spotify(auth=spotify_token)
+spotifyObject = spotipy.Spotify(auth=get_spotify_token())
+youtube_playlist_name = "Youtube Videos"
 
 
 class GenerateSpotifyPlaylist:
@@ -56,7 +55,6 @@ class GenerateSpotifyPlaylist:
         self.all_song_info = {}
 
     def generate_playlist(self):
-        youtube_playlist_name = "Youtube Videos"
         youtube_playlist_desciption = "A compilation of every video liked by me on youtube."
         all_user_playlists = spotifyObject.current_user_playlists(50)
 
@@ -66,7 +64,7 @@ class GenerateSpotifyPlaylist:
                 return playlist["id"]
 
         new_playlist = spotifyObject.user_playlist_create(spotify_username, youtube_playlist_name, True,
-                                                      youtube_playlist_desciption)
+                                                          youtube_playlist_desciption)
         return new_playlist["id"]
 
     def get_liked_yt_videos(self):
@@ -110,7 +108,17 @@ class GenerateSpotifyPlaylist:
         # replace essentially adds/updates the playlist
         return spotifyObject.user_playlist_replace_tracks(spotify_username, self.playlist_id, uris)
 
+    def start_playback(self):
+        devices = spotifyObject.devices()
+        device_id = devices['devices'][0]['id']
+        device_name = devices['devices'][0]['name']
+        uri = "spotify:playlist:{}".format(self.playlist_id)
+        spotifyObject.start_playback(device_id, uri)
+        print(">>>>>>>>>>>> Successfully started playing: '{}' on '{}' <<<<<<<<<<<<".format(youtube_playlist_name,
+                                                                                            device_name))
+
 
 if __name__ == '__main__':
     generatePlaylist = GenerateSpotifyPlaylist()
     generatePlaylist.add_song_to_playlist()
+    generatePlaylist.start_playback()
