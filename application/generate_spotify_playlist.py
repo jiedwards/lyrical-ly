@@ -102,8 +102,15 @@ class GenerateSpotifyPlaylist:
         uri = songs[0]["uri"]
         return uri
 
+    def add_song_to_playlist(self):
+        self.get_liked_yt_videos()
+
+        uris = [info["spotify_uri"]
+                for song, info in self.all_song_info.items()]
+        # replace essentially adds/updates the playlist
+        return spotifyObject.user_playlist_replace_tracks(spotify_username, self.playlist_id, uris)
+
+
 if __name__ == '__main__':
     generatePlaylist = GenerateSpotifyPlaylist()
-    generatePlaylist.generate_playlist()
-    generatePlaylist.get_liked_yt_videos()
-    generatePlaylist.get_spotify_uri()
+    generatePlaylist.add_song_to_playlist()
