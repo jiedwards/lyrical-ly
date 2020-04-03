@@ -43,7 +43,7 @@ def get_spotify_token():
     return token
 
 
-spotifyObject = spotipy.Spotify(auth=get_spotify_token())
+spotify_object = spotipy.Spotify(auth=get_spotify_token())
 youtube_playlist_name = "Youtube Videos"
 
 
@@ -57,15 +57,15 @@ class GenerateSpotifyPlaylist:
 
     def generate_playlist(self):
         youtube_playlist_desciption = "A compilation of every video liked by me on youtube."
-        all_user_playlists = spotifyObject.current_user_playlists(50)
+        all_user_playlists = spotify_object.current_user_playlists(50)
 
         # To check whether a playlist already exists, before creating an entirely new one.
         for playlist in all_user_playlists["items"]:
             if playlist["name"] == youtube_playlist_name:
                 return playlist["id"]
 
-        new_playlist = spotifyObject.user_playlist_create(spotify_username, youtube_playlist_name, True,
-                                                          youtube_playlist_desciption)
+        new_playlist = spotify_object.user_playlist_create(spotify_username, youtube_playlist_name, True,
+                                                           youtube_playlist_desciption)
         return new_playlist["id"]
 
     def get_liked_yt_videos(self):
@@ -103,7 +103,7 @@ class GenerateSpotifyPlaylist:
     def get_spotify_uri(self, song_name, artist):
         # Functionality to search for song
         search_query = 'artist: {}, track: {}'.format(artist, song_name)
-        all_songs_found = spotifyObject.search(search_query, 20, 0, 'track')
+        all_songs_found = spotify_object.search(search_query, 20, 0, 'track')
         songs = all_songs_found["tracks"]["items"]
         uri = songs[0]["uri"]
         return uri
@@ -114,14 +114,14 @@ class GenerateSpotifyPlaylist:
         uris = [info["spotify_uri"]
                 for song, info in self.all_song_info.items()]
         # replace essentially adds/updates the playlist
-        return spotifyObject.user_playlist_replace_tracks(spotify_username, self.playlist_id, uris)
+        return spotify_object.user_playlist_replace_tracks(spotify_username, self.playlist_id, uris)
 
     def start_playback(self):
-        devices = spotifyObject.devices()
+        devices = spotify_object.devices()
         device_id = devices['devices'][0]['id']
         device_name = devices['devices'][0]['name']
         uri = "spotify:playlist:{}".format(self.playlist_id)
-        spotifyObject.start_playback(device_id, uri)
+        spotify_object.start_playback(device_id, uri)
         print()
         print(">>>>>>>>>>>> Successfully started playing: '{}' on '{}' <<<<<<<<<<<<".format(youtube_playlist_name,
                                                                                  device_name))

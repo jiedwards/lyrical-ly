@@ -44,18 +44,6 @@ to retrieve the lyrics for the song which is currently playing.
 
 ![Demonstration of the application](application/resources/demo.gif)
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ## Built With
 
 * [Youtube Data API](https://developers.google.com/youtube/v3) - The API used to extract song information from Youtube 
