@@ -70,28 +70,35 @@ class GenerateSpotifyPlaylist:
 
     def get_liked_yt_videos(self):
         request = self.youtube_client.videos().list(
+            maxResults=10,
             part="snippet,contentDetails,statistics",
             myRating="like"
         )
         response = request.execute()
 
         for video in response["items"]:
-            video_title = video["snippet"]["title"]
-            youtube_url = "https://www.youtube.com/watch?v={}".format(video["id"])
+            if video["snippet"]["categoryId"] == '10':
+                video_title = video["snippet"]["title"]
+                youtube_url = "https://www.youtube.com/watch?v={}".format(video["id"])
 
-            video = youtube_dl.YoutubeDL({}).extract_info(youtube_url, download=False)
-            song_name = video["track"]
-            artist = video["artist"]
+                video = youtube_dl.YoutubeDL({}).extract_info(youtube_url, download=False)
+                song_name = video["track"]
+                artist = video["artist"]
 
-            if song_name is not None and artist is not None:
-                self.all_song_info[video_title] = {
-                    "youtube_url": youtube_url,
-                    "song_name": song_name,
-                    "artist": artist,
+                if song_name is not None and artist is not None:
+                    self.all_song_info[video_title] = {
+                        "youtube_url": youtube_url,
+                        "song_name": song_name,
+                        "artist": artist,
 
-                    "spotify_uri": self.get_spotify_uri(song_name, artist)
+                        "spotify_uri": self.get_spotify_uri(song_name, artist)
 
-                }
+                    }
+                else:
+                    print("The song '{}' cannot be processed as the required information is not uploaded to Youtube."
+                          .format(video_title))
+            else:
+                pass
 
     def get_spotify_uri(self, song_name, artist):
         # Functionality to search for song
