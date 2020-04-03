@@ -50,9 +50,24 @@ class RetrieveSongLyrics:
                 remote_song_info = match
                 break
         try:
-            return self.extract_lyrics(remote_song_info)
+            song_url = remote_song_info['result']['url']
+            return self.scrape_song_lyrics(song_url, song_title, artist)
         except UnboundLocalError:
             print("Song not found on genius")
+            sys.exit()
+
+    # Method to scrape the lyrics from Genius' web page.
+    def scrape_song_lyrics(self, url, song_title, artist):
+        try:
+            page = requests.get(url)
+            html = BeautifulSoup(page.text, 'html.parser')
+            song_lyrics = html.find('div', class_="lyrics").get_text()
+
+            print()
+            print(">>>>>>>>>>>> Now playing: '{}' by '{}' <<<<<<<<<<<<".format(song_title, artist))
+            print(song_lyrics)
+        except TypeError:
+            print("Song '{}' by '{}' URL cannot be found on Genius.".format(song_title, artist))
             sys.exit()
 
 
