@@ -33,9 +33,27 @@ class RetrieveSongLyrics:
             raise TypeError("There is nothing currently playing. You have to play a song for this script to run.")
             sys.exit()
 
-        artist_name = playback['item']['artists'][0]['name']
+        artist = playback['item']['artists'][0]['name']
         song_title = playback['item']['name']
-        return artist_name, song_title
+        self.request_song_info(song_title, artist)
+        return artist, song_title
+
+    # Method to request the song information from Genius' API
+    def request_song_info(self, song_title, artist):
+        search_url = 'https://api.genius.com/search'
+        request_headers = {'Authorization': 'Bearer ' + genius_client_token}
+        data = {'q': song_title + ' ' + artist}
+        response = requests.get(search_url, data=data, headers=request_headers)
+        json = response.json()
+        for match in json['response']['hits']:
+            if artist.lower() in match['result']['primary_artist']['name'].lower():
+                remote_song_info = match
+                break
+        try:
+            return self.extract_lyrics(remote_song_info)
+        except UnboundLocalError:
+            print("Song not found on genius")
+            sys.exit()
 
 
 if __name__ == '__main__':
