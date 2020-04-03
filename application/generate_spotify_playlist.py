@@ -17,10 +17,11 @@ def get_youtube_client():
 
     api_service_name = "youtube"
     api_version = "v3"
-    client_secrets_file = "resources/client_secret.json"
+    absolute_path = os.path.dirname(os.path.abspath(__file__))
+    client_secrets_file = os.path.join(absolute_path, 'resources/client_secret.json')
     scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
 
-    credential_path = os.path.join('./resources', 'google_credentials.json')
+    credential_path = os.path.join(absolute_path, 'resources/google_credentials.json')
     store = Storage(credential_path)
     credentials = store.get()
     if not credentials or credentials.invalid:
@@ -114,8 +115,9 @@ class GenerateSpotifyPlaylist:
         device_name = devices['devices'][0]['name']
         uri = "spotify:playlist:{}".format(self.playlist_id)
         spotifyObject.start_playback(device_id, uri)
+        print()
         print(">>>>>>>>>>>> Successfully started playing: '{}' on '{}' <<<<<<<<<<<<".format(youtube_playlist_name,
-                                                                                            device_name))
+                                                                                 device_name))
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-# Playlist and Lyrics Generator
+# Youtube/Spotify Playlist and Genius Lyrics Generator
 
 This project allows a user to extract all of their liked youtube music videos via the Google Cloud API, whilst simultaneously creating a spotify playlist containing those songs using the Spotify API. 
 The application also has the ability to locate the lyrics using the Genius API and display them on the terminal. 
@@ -24,7 +24,23 @@ python3 setup.py
 Proceed to insert/replace the required information in the client_secret.json (application/resources directory) file, the template is available. 
 Obtain your credentials by following this guide (https://developers.google.com/adwords/api/docs/guides/authentication) and selecting "other" for application type.
 
-### Demonstration
+To run all of the scripts simultaneously: 
+```
+python3 application.py
+```
+Or if you prefer to execute them separately, feel free to run:
+```
+python3 generate_spotify_playlist.py
+```
+to extract all the liked youtube videos, and create a playlist.
+
+Then 
+```
+python3 retrieve_genius_lyrics.py
+```
+to retrieve the lyrics for the song which is currently playing. 
+
+## Demonstration
 
 ![Demonstration of the application](application/resources/demo.gif)
 
