@@ -1,6 +1,6 @@
-# Youtube/Spotify Playlist and Genius Lyrics Generator
+# lyrical.ly
 
-This project allows a user to extract all of their liked youtube music videos via the Google Cloud API, whilst simultaneously creating a spotify playlist containing those songs using the Spotify API. 
+This project allows a user to extract their liked youtube music videos via the Youtube Data API, whilst simultaneously creating a spotify playlist containing those songs using the Spotify API. 
 The application also has the ability to locate the lyrics using the Genius API and display them on the terminal. 
 
 ### Prerequisites
