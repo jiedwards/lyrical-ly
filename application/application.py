@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from generate_spotify_playlist import GenerateSpotifyPlaylist
 from retrieve_genius_lyrics import RetrieveSongLyrics
 
